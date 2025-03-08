@@ -1,5 +1,7 @@
 package com.example.bank_account_app.model;
 
+import com.example.bank_account_app.enums.Currency;
+import com.example.bank_account_app.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * This Entity is to store all transaction like debit and credit.
+ */
 @Builder
 @Entity
 @Table(name = "transactions")
@@ -26,14 +31,16 @@ public class Transaction {
     @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
     private Account account;
 
-    @Column(name = "transaction_type", nullable = false, length = 10)
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type", nullable = false)
+    private TransactionType transactionType;
 
     @Column(name = "amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "currency", nullable = false, length = 3)
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", nullable = false)
+    private Currency currency;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
