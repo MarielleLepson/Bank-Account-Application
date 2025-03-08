@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: bank-account-app
+  datasource:
+    url: jdbc:h2:mem:bank-account-app-db # TODO: ML-e: Maybe later try to jdbc:h2:file:./bank-account-app-db
+    username: username
+    password: password123
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db.migration
