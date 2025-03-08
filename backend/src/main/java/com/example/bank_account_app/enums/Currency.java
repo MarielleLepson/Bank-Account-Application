@@ -7,9 +7,6 @@ public enum Currency {
     USD, // US Dollar
     SEK, // Swedish Króna
     RUB, // Russian Ruble
-    GBP, // British Pound
-    JPY, // Japanese Yen
-    CNY, // Chinese Yuan
     KRW, // Korean Won
 }
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @Builder
 @Entity
-@Table(name = "accounts")
+@Table(name = "account_balances")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,8 +28,8 @@ public class AccountBalance {
         @Column(name = "id")
         private int id; // unique account balance ID
 
-        @ManyToOne
-        @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "account_id", nullable = false)
         private Account account; // account to which this balance belongs
 
         @Enumerated(EnumType.STRING)
@@ -46,10 +46,9 @@ public class AccountBalance {
         @Column(name = "created_by", nullable = false)
         private String createdBy; // the user who created the balance
 
-        @UpdateTimestamp
-        @Column(name = "last_modified_at", nullable = false)
+        @Column(name = "last_modified_at")
         private LocalDateTime lastModifiedAt; // timestamp of when the balance was last modified
 
-        @Column(name = "last_modified_by", nullable = false)
+        @Column(name = "last_modified_by")
         private String lastModifiedBy; // the user who last modified the balance
 }
