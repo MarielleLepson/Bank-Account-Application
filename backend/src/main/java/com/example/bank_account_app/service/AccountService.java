@@ -18,7 +18,7 @@ public class AccountService {
      * Saves all accounts to the database.
      */
     public void saveAllAccounts(List<Account> accounts) {
-        accountRepository.saveAll(accounts);
+        accountRepository.saveAllAndFlush(accounts);
     }
 
     /**

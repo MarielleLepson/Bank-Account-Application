@@ -31,7 +31,7 @@ public class InitialDataLoader implements ApplicationRunner {
     private final AccountBalanceService accountBalanceService;
 
     private static final String DATA_LOADED_BY = "initial data loader";
-    private boolean alreadySetup = false;
+    boolean alreadySetup = false;
 
     /**
      * Creates initial bank account data if the database is empty.
@@ -40,6 +40,7 @@ public class InitialDataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         if (alreadySetup || accountRepository.count() > 0) {
             log.debug("Skipping initial data load (already set up).");
+            alreadySetup = true;
             return;
         }
         log.info("Loading initial data...");
@@ -54,7 +55,7 @@ public class InitialDataLoader implements ApplicationRunner {
     /**
      * Creates sample bank account and saves them to the database.
      */
-    private List<Account> createBankAccounts() {
+    public List<Account> createBankAccounts() {
         log.debug("Creating sample bank accounts...");
         List<String> accountHolders = List.of("Mart Tamm", "Mari Maasikas", "Siim Sepp", "Kati Kask");
         List<Account> accounts = new ArrayList<>();
@@ -70,7 +71,7 @@ public class InitialDataLoader implements ApplicationRunner {
     /**
      * Creates sample account balances for the given bank accounts.
      */
-    private void createAccountBalances(List<Account> accounts) {
+    public void createAccountBalances(List<Account> accounts) {
         log.debug("Creating sample account balances...");
         List<AccountBalance> accountBalances = new ArrayList<>();
         accounts.forEach(account -> {

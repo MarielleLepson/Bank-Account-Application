@@ -23,7 +23,7 @@ public class AccountBalanceService {
      * Saves account balances for the provided accounts.
      */
     public void saveAllAccountBalances(List<AccountBalance> accountBalances) {
-        accountBalanceRepository.saveAll(accountBalances);
+        accountBalanceRepository.saveAllAndFlush(accountBalances);
     }
 
     /**
@@ -57,5 +57,9 @@ public class AccountBalanceService {
         }
         var balance = BalanceUtils.generateRandomBalance(currency);
         return buildAccountBalanceEntity(account, BigDecimal.valueOf(balance), currency, createdBy);
+    }
+
+    public int countAccountBalances() {
+        return (int) accountBalanceRepository.count();
     }
 }
