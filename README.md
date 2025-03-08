@@ -1,4 +1,4 @@
-# Bank-Account-Application
+# Bank Account Handling REST API
 REST API for handling bank accounts using Java and Spring framework 
 
 
