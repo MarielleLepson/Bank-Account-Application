@@ -2,7 +2,7 @@ spring:
   application:
     name: bank-account-app
   datasource:
-    url: jdbc:h2:mem:bank-account-app-db # TODO: ML-e: Can also try jdbc:h2:file:./bank-account-app-db
+    url: jdbc:h2:mem:bank-account-app-db # TODO: MLe: Can also try jdbc:h2:file:./bank-account-app-db
     username: username
     password: password123
     driverClassName: org.h2.Driver
