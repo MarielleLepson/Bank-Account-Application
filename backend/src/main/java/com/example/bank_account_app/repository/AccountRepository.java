@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    // TODO: ML-e: Add custom queries here
+    Account findByAccountNumber(String accountNumber);
 }

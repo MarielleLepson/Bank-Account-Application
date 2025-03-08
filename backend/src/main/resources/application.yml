@@ -21,3 +21,7 @@ spring:
 logging:
   level:
     com.example.bank_account_app: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html # TODO: MLe: Remove later: http://localhost:8080/swagger-ui/index.html
