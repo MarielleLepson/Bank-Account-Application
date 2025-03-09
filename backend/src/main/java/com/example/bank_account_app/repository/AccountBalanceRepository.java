@@ -13,7 +13,7 @@ import java.util.List;
 public interface AccountBalanceRepository extends JpaRepository<AccountBalance, Long> {
 
     // find all account balances by account id
-    List<AccountBalance> findAllByAccountId(Long accountId);
+    List<AccountBalance> findAllByAccountId(int accountId);
 
 
 }

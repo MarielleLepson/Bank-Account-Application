@@ -24,7 +24,7 @@ public class AccountBalanceService {
      * Fetches account balances for the provided accounts.
      */
     public List<AccountBalance> getAccountBalances(Account account) {
-        return accountBalanceRepository.findAllByAccountId((long) account.getId());
+        return accountBalanceRepository.findAllByAccountId(account.getId());
     }
 
     /**
