@@ -23,4 +23,11 @@ public class AccountUtils {
     public static boolean isValidAccountNumber(String accountNumber) {
         return accountNumber != null && accountNumber.matches("^EE\\d{18}$");
     }
+
+    /**
+     * Validates the given account holder name. The name must contain only letters and spaces.
+     */
+    public static boolean isValidAccountHolder(String accountHolder) {
+        return accountHolder != null && accountHolder.matches("^[a-zA-Z ]+$");
+    }
 }

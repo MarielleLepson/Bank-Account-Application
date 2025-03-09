@@ -1,8 +1,8 @@
 package com.example.bank_account_app.controller;
 
 import com.example.bank_account_app.dto.AccountDTO;
+import com.example.bank_account_app.dto.CreateAccountDTO;
 import com.example.bank_account_app.model.Account;
-import com.example.bank_account_app.repository.AccountRepository;
 import com.example.bank_account_app.service.AccountService;
 import com.example.bank_account_app.util.AccountUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api/account")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
@@ -38,7 +38,9 @@ public class AccountController {
     @GetMapping
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         log.info("Fetching all bank accounts...");
+        // Fetch all accounts
         List<Account> accounts = accountService.getAllAccounts();
+        // Map accounts to DTO
         List<AccountDTO> response = accountService.mapAccountsToDTO(accounts);
         return ResponseEntity.ok(response);
     }
@@ -62,18 +64,55 @@ public class AccountController {
             @PathVariable String accountNumber) {
         log.info("Fetching account with account number: {}", accountNumber);
 
+        // Validate account number
         if (!AccountUtils.isValidAccountNumber(accountNumber)) { // Validate account number
             log.warn("Invalid account number: {}", accountNumber);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid account number");
         }
 
+        // Fetch account by account number
         Account account = accountService.getAccountByAccountNumber(accountNumber);
+
+        // Check if account exists
         if (account == null) {
             log.warn("Account not found: {}", accountNumber);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
         }
 
+        // Return account
         AccountDTO response = accountService.mapAccountToDTO(account);
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Create a new bank account. Bank account holder name must contain only letters and spaces.
+     */
+    @Operation(summary = "Create a new bank account", description = "Creates a new bank account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created bank account",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AccountDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid account holder name",
+                    content = @Content())
+    })
+    @PostMapping("/create")
+    public ResponseEntity<?> createAccount(@RequestBody CreateAccountDTO createAccountDTO) {
+        log.info("Creating a new bank account...");
+
+        // Validate account holder name
+        if (!AccountUtils.isValidAccountHolder(createAccountDTO.getAccountHolder())) {
+            log.warn("Invalid account holder name: {}", createAccountDTO.getAccountHolder());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid account holder name");
+        }
+
+        // Generate account number and save account
+        String accountNumber = AccountUtils.generateAccountNumber();
+        Account account = accountService.buildAccountEntity(accountNumber, createAccountDTO.getAccountHolder(), createAccountDTO.getAccountHolder());
+        accountService.saveAccount(account);
+
+        // Return created account
+        AccountDTO response = accountService.mapAccountToDTO(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 }

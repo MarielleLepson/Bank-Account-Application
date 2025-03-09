@@ -18,7 +18,7 @@ public class AccountDTO {
     @Schema(description = "Bank account number", example = "EE123456789012345678")
     private String accountNumber;
 
-    @Schema(description = "Name of the account holder", example = "John Doe")
+    @Schema(description = "Name of the account holder", example = "Karl Kask")
     private String accountHolder;
 
     /**

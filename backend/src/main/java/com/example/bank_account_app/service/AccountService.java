@@ -46,6 +46,13 @@ public class AccountService {
     }
 
     /**
+     * Save account to the database.
+     */
+    public Account saveAccount(Account account) {
+        return accountRepository.save(account);
+    }
+
+    /**
      * Saves all accounts to the database.
      */
     public void saveAllAccounts(List<Account> accounts) {
