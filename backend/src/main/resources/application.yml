@@ -22,6 +22,10 @@ logging:
   level:
     com.example.bank_account_app: DEBUG
 
+bank-account-app:
+  currency-exchange:
+    endpoint: "https://open.er-api.com/v6/latest/"
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html # TODO: MLe: Remove later: http://localhost:8080/swagger-ui/index.html

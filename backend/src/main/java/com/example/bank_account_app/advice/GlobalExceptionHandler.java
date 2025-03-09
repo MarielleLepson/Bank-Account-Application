@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.example.bank_account_app.controller")
+@RestControllerAdvice()
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
-public class AccountBalanceControllerAdvice extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BalanceNotFoundException.class)
     public ResponseEntity<String> handleBalanceNotFound(BalanceNotFoundException ex) {
