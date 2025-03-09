@@ -17,4 +17,11 @@ public class CurrencyUtils {
         List<Currency> currencies = List.of(Currency.values());
         return currencies.get(RANDOM.nextInt(currencies.size()));
     }
+
+    /**
+     * Fetches all supported currencies.
+     */
+    public static List<Currency> getSupportedCurrencies() {
+        return List.of(Currency.values());
+    }
 }

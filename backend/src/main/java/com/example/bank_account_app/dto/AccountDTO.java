@@ -11,10 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDTO {
-
-    @Schema(description = "Unique account ID", example = "1")
-    private int id;
-
     @Schema(description = "Bank account number", example = "EE123456789012345678")
     private String accountNumber;
 
@@ -26,7 +22,6 @@ public class AccountDTO {
      */
     public AccountDTO toDTO(Account account) {
         return new AccountDTO(
-                account.getId(),
                 account.getAccountNumber(),
                 account.getAccountHolder()
         );

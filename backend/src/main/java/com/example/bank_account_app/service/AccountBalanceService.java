@@ -1,5 +1,6 @@
 package com.example.bank_account_app.service;
 
+import com.example.bank_account_app.dto.AccountBalanceDTO;
 import com.example.bank_account_app.enums.Currency;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
@@ -18,6 +19,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountBalanceService {
     private final AccountBalanceRepository accountBalanceRepository;
+
+    /**
+     * Fetches account balances for the provided accounts.
+     */
+    public List<AccountBalance> getAccountBalances(Account account) {
+        return accountBalanceRepository.findAllByAccountId((long) account.getId());
+    }
+
+    /**
+     * Map account balances to DTO and go though all supported currencies.
+     */
+    public List<AccountBalanceDTO> mapAccountBalancesToDTO(List<AccountBalance> accountBalances) {
+        List<Currency> currencies = CurrencyUtils.getSupportedCurrencies();
+        return currencies.stream()
+                .map(currency -> mapAccountBalanceToDTO(accountBalances, currency))
+                .toList();
+    }
+
+    /**
+     * Map account balance to DTO.
+     */
+    public AccountBalanceDTO mapAccountBalanceToDTO(List<AccountBalance> accountBalances, Currency currency) {
+        AccountBalance accountBalance = accountBalances.stream()
+                .filter(balance -> balance.getCurrency().equals(currency))
+                .findFirst()
+                .orElse(null);
+        return new AccountBalanceDTO(currency.name(), accountBalance != null ? accountBalance.getBalance().toString() : "0");
+    }
 
     /**
      * Saves account balances for the provided accounts.

@@ -48,8 +48,8 @@ public class AccountService {
     /**
      * Save account to the database.
      */
-    public Account saveAccount(Account account) {
-        return accountRepository.save(account);
+    public void saveAccount(Account account) {
+        accountRepository.save(account);
     }
 
     /**
