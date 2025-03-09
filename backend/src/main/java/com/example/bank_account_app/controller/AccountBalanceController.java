@@ -2,6 +2,7 @@ package com.example.bank_account_app.controller;
 
 import com.example.bank_account_app.dto.AccountBalanceDTO;
 import com.example.bank_account_app.dto.CreditBalanceDTO;
+import com.example.bank_account_app.dto.DebitBalanceDTO;
 import com.example.bank_account_app.dto.TransactionCommand;
 import com.example.bank_account_app.enums.TransactionType;
 import com.example.bank_account_app.model.Account;
@@ -84,7 +85,7 @@ public class AccountBalanceController {
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid CreditBalanceDTO payload",
                     content = @Content())
     })
-    @PostMapping("/deposit")
+    @PostMapping("/credit")
     public ResponseEntity<?> depositMoney(
             @Valid @RequestBody CreditBalanceDTO creditBalanceDTO,
             Errors errors) {
@@ -104,7 +105,7 @@ public class AccountBalanceController {
         }
 
         // Deposit money into account for the specified currency
-        accountBalanceService.depositMoney(account, creditBalanceDTO, account.getAccountHolder());
+        accountBalanceService.creditMoney(account, creditBalanceDTO, account.getAccountHolder());
 
         // Also save this step as a transaction
         TransactionCommand cmd = TransactionCommand.builder()
@@ -119,5 +120,57 @@ public class AccountBalanceController {
         log.info("Deposit successful");
         return ResponseEntity.ok("Deposit successful");
     }
+
+
+    /**
+     * Feature 2: Debit Money from Account. Allow debiting money from an account in a single currency. Automatic currency exchange is not allowed for debiting operations.
+     * The account must have sufficient balance in the specified currency.
+     */
+    @Operation(summary = "Feature 2: Withdraw money from Account", description = "Debit money from an account in a single currency")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully debited money",
+                    content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Not found - The account or balance does not exist",
+                    content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid CreditBalanceDTO payload",
+                    content = @Content()),
+            @ApiResponse(responseCode = "422", description = "Unprocessable entity - Insufficient balance",
+                    content = @Content())
+    })
+    @PostMapping("/debit")
+    public ResponseEntity<?> debitMoney(
+            @Valid @RequestBody DebitBalanceDTO debitBalanceDTO,
+            Errors errors) throws Exception {
+        log.info("Debiting money from account...");
+        // Validate request DTO
+        if (errors.hasErrors()) {
+            log.warn("Invalid request: {}", errors.getAllErrors());
+            return ResponseEntity.badRequest().body(errors.getAllErrors());
+        }
+
+        // Fetch account by account number
+        Account account = accountService.getAccountByAccountNumber(debitBalanceDTO.getAccountNumber());
+        if (account == null) {
+            log.warn("Account not found for account number: {}", debitBalanceDTO.getAccountNumber());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        // Debit money from account for the specified currency
+        accountBalanceService.debitMoney(account, debitBalanceDTO, account.getAccountHolder());
+
+        // Also save this step as a transaction
+        TransactionCommand cmd = TransactionCommand.builder()
+                .account(account)
+                .amount(debitBalanceDTO.getAmount())
+                .currency(debitBalanceDTO.getCurrency())
+                .type(TransactionType.DEBIT)
+                .createdBy(account.getAccountHolder())
+                .build();
+        transactionService.createNewTransaction(cmd);
+
+        log.info("Debit successful");
+        return ResponseEntity.ok("Debit successful");
+    }
+
 
 }

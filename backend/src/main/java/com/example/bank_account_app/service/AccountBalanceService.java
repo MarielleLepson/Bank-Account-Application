@@ -3,7 +3,10 @@ package com.example.bank_account_app.service;
 import com.example.bank_account_app.dto.AccountBalanceDTO;
 import com.example.bank_account_app.dto.CreditBalanceDTO;
 import com.example.bank_account_app.dto.CurrencyBalance;
+import com.example.bank_account_app.dto.DebitBalanceDTO;
 import com.example.bank_account_app.enums.Currency;
+import com.example.bank_account_app.exceptions.BalanceNotFoundException;
+import com.example.bank_account_app.exceptions.InsufficientBalanceException;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
@@ -25,7 +28,7 @@ public class AccountBalanceService {
     /**
      * Deposit the provided amount to the account balance.
      */
-    public void depositMoney(Account account, CreditBalanceDTO dto, String createdBy) {
+    public void creditMoney(Account account, CreditBalanceDTO dto, String createdBy) {
         log.debug("Depositing money to account: {}", account.getAccountNumber());
         List<AccountBalance> accountBalances = getAccountBalances(account);
 
@@ -53,6 +56,50 @@ public class AccountBalanceService {
 
         log.debug("Saving account balances");
         saveAllAccountBalances(accountBalances);
+    }
+
+    /**
+     * Withdraw the provided amount from the account balance.
+     */
+    public void debitMoney(Account account, DebitBalanceDTO dto, String createdBy) throws Exception {
+        log.debug("Withdrawing money from account: {}", account.getAccountNumber());
+        List<AccountBalance> accountBalances = getAccountBalances(account);
+
+        Currency currency = dto.getCurrency();
+        BigDecimal amount = BigDecimal.valueOf(dto.getAmount());
+
+        // Find the balance with the same currency
+        AccountBalance accountBalance = accountBalances.stream()
+                .filter(balance -> balance.getCurrency().equals(dto.getCurrency()))
+                .findFirst()
+                .orElse(null);
+
+        // Check if the balance exists
+        if (accountBalance == null) {
+            log.warn("No balance found for currency: {}", currency);
+            throw new BalanceNotFoundException("No balance found");
+        }
+
+        // Check if the balance is sufficient
+        if (!isBalanceSufficient(amount, accountBalance)) {
+            log.warn("Insufficient balance for currency: {}", currency);
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        // Update the balance
+        accountBalance.setBalance(accountBalance.getBalance().subtract(amount));
+        accountBalance.setLastModifiedBy(createdBy);
+        accountBalance.setLastModifiedAt(LocalDateTime.now());
+
+        log.debug("Saving account balances");
+        saveAllAccountBalances(accountBalances);
+    }
+
+    /**
+     * Is the balance sufficient for the provided amount
+     */
+    public boolean isBalanceSufficient(BigDecimal amount, AccountBalance accountBalance) {
+        return accountBalance.getBalance().compareTo(amount) >= 0;
     }
 
 
