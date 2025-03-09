@@ -1,15 +1,16 @@
 package com.example.bank_account_app.dto;
 
 
+import com.example.bank_account_app.model.Account;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class AccountByAccountNumberDTO {
+@NoArgsConstructor
+public class AccountDTO {
 
     @Schema(description = "Unique account ID", example = "1")
     private int id;
@@ -20,9 +21,14 @@ public class AccountByAccountNumberDTO {
     @Schema(description = "Name of the account holder", example = "John Doe")
     private String accountHolder;
 
-    @Schema(description = "The time when the account was created", example = "2021-12-31T23:59:59")
-    private LocalDateTime createdAt;
-
-    @Schema(description = "The user who created the bank account", example = "admin")
-    private String createdBy;
+    /**
+     * Converts an Account entity to a DTO.
+     */
+    public AccountDTO toDTO(Account account) {
+        return new AccountDTO(
+                account.getId(),
+                account.getAccountNumber(),
+                account.getAccountHolder()
+        );
+    }
 }

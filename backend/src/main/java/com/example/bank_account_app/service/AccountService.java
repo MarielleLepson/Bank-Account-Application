@@ -1,5 +1,6 @@
 package com.example.bank_account_app.service;
 
+import com.example.bank_account_app.dto.AccountDTO;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+
+    /**
+     * Fetches all accounts from the database.
+     */
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
+    }
+
+    /**
+     * Fetches an account by account number.
+     */
+    public Account getAccountByAccountNumber(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber);
+    }
+
+    /**
+     * Map list of accounts to DTO.
+     */
+    public List<AccountDTO> mapAccountsToDTO(List<Account> accounts) {
+        return accounts.stream()
+                .map(this::mapAccountToDTO)
+                .toList();
+    }
+
+    /**
+     * Map account to DTO.
+     */
+    public AccountDTO mapAccountToDTO(Account account) {
+        return new AccountDTO().toDTO(account);
+    }
 
     /**
      * Saves all accounts to the database.
