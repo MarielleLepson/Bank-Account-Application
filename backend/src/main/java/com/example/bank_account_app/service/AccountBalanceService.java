@@ -61,7 +61,7 @@ public class AccountBalanceService {
     /**
      * Withdraw the provided amount from the account balance.
      */
-    public void debitMoney(Account account, DebitBalanceDTO dto, String createdBy) throws Exception {
+    public void debitMoney(Account account, DebitBalanceDTO dto, String createdBy) {
         log.debug("Withdrawing money from account: {}", account.getAccountNumber());
         List<AccountBalance> accountBalances = getAccountBalances(account);
 

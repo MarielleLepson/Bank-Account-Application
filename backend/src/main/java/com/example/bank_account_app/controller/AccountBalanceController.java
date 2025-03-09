@@ -140,7 +140,7 @@ public class AccountBalanceController {
     @PostMapping("/debit")
     public ResponseEntity<?> debitMoney(
             @Valid @RequestBody DebitBalanceDTO debitBalanceDTO,
-            Errors errors) throws Exception {
+            Errors errors) {
         log.info("Debiting money from account...");
         // Validate request DTO
         if (errors.hasErrors()) {
