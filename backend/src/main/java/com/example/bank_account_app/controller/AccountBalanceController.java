@@ -47,7 +47,6 @@ public class AccountBalanceController {
     @GetMapping("/{accountNumber}")
     public ResponseEntity<?> getAccountBalance(@Parameter(description = "Bank account number", example = "EE123456789012345678")
                                                @PathVariable String accountNumber) {
-
         // Validate account number
         if (!AccountUtils.isValidAccountNumber(accountNumber)) {
             log.warn("Invalid account number: {}", accountNumber);
@@ -65,7 +64,7 @@ public class AccountBalanceController {
         List<AccountBalance> accountBalances = accountBalanceService.getAccountBalances(account);
 
         // Map account balances to DTO
-        List<AccountBalanceDTO> response = accountBalanceService.mapAccountBalancesToDTO(accountBalances);
+        AccountBalanceDTO response = accountBalanceService.mapAccountBalancesToDTO(accountBalances, account);
         return ResponseEntity.ok(response);
     }
 

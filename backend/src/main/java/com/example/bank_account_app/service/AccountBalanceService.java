@@ -1,6 +1,7 @@
 package com.example.bank_account_app.service;
 
 import com.example.bank_account_app.dto.AccountBalanceDTO;
+import com.example.bank_account_app.dto.CurrencyBalance;
 import com.example.bank_account_app.enums.Currency;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
@@ -10,9 +11,10 @@ import com.example.bank_account_app.util.CurrencyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -30,22 +32,25 @@ public class AccountBalanceService {
     /**
      * Map account balances to DTO and go though all supported currencies.
      */
-    public List<AccountBalanceDTO> mapAccountBalancesToDTO(List<AccountBalance> accountBalances) {
-        List<Currency> currencies = CurrencyUtils.getSupportedCurrencies();
-        return currencies.stream()
-                .map(currency -> mapAccountBalanceToDTO(accountBalances, currency))
-                .toList();
-    }
+    public AccountBalanceDTO mapAccountBalancesToDTO(List<AccountBalance> accountBalances, Account account) {
+        List<Currency> supportedCurrencies = CurrencyUtils.getSupportedCurrencies();
 
-    /**
-     * Map account balance to DTO.
-     */
-    public AccountBalanceDTO mapAccountBalanceToDTO(List<AccountBalance> accountBalances, Currency currency) {
-        AccountBalance accountBalance = accountBalances.stream()
-                .filter(balance -> balance.getCurrency().equals(currency))
-                .findFirst()
-                .orElse(null);
-        return new AccountBalanceDTO(currency.name(), accountBalance != null ? accountBalance.getBalance().toString() : "0");
+        // Initialize DTO with the account number
+        AccountBalanceDTO accountBalanceDTO = new AccountBalanceDTO();
+        accountBalanceDTO.setAccountNumber(account.getAccountNumber());
+
+        // Map balances for all supported currencies
+        List<CurrencyBalance> currencyBalances = supportedCurrencies.stream()
+                .map(currency -> accountBalances.stream()
+                        .filter(balance -> balance.getCurrency().equals(currency))
+                        .findFirst()
+                        .map(balance -> new CurrencyBalance(currency.name(), balance.getBalance().toString()))
+                        .orElse(new CurrencyBalance(currency.name(), "0"))
+                )
+                .toList();
+
+        accountBalanceDTO.setCurrencyBalances(currencyBalances);
+        return accountBalanceDTO;
     }
 
     /**
