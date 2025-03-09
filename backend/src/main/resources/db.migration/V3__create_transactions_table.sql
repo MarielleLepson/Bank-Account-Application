@@ -8,8 +8,6 @@ CREATE TABLE IF NOT EXISTS transactions
     transaction_date TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL,
     created_by VARCHAR(100) NOT NULL,
-    last_modified_at TIMESTAMP NOT NULL,
-    last_modified_by VARCHAR(100) NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 

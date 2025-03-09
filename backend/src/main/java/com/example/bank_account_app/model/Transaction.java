@@ -51,11 +51,4 @@ public class Transaction {
 
     @Column(name = "created_by", nullable = false, length = 100)
     private String createdBy;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_at", nullable = false)
-    private LocalDateTime lastModifiedAt;
-
-    @Column(name = "last_modified_by", nullable = false, length = 100)
-    private String lastModifiedBy;
 }

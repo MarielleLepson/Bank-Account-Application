@@ -1,6 +1,7 @@
 package com.example.bank_account_app.service;
 
 import com.example.bank_account_app.dto.AccountBalanceDTO;
+import com.example.bank_account_app.dto.CreditBalanceDTO;
 import com.example.bank_account_app.dto.CurrencyBalance;
 import com.example.bank_account_app.enums.Currency;
 import com.example.bank_account_app.model.Account;
@@ -12,15 +13,48 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AccountBalanceService {
     private final AccountBalanceRepository accountBalanceRepository;
+
+    /**
+     * Deposit the provided amount to the account balance.
+     */
+    public void depositMoney(Account account, CreditBalanceDTO dto, String createdBy) {
+        log.debug("Depositing money to account: {}", account.getAccountNumber());
+        List<AccountBalance> accountBalances = getAccountBalances(account);
+
+        Currency currency = dto.getCurrency();
+        BigDecimal amount = BigDecimal.valueOf(dto.getAmount());
+
+        // Find the balance with the same currency
+        AccountBalance accountBalance = accountBalances.stream()
+                .filter(balance -> balance.getCurrency().equals(dto.getCurrency()))
+                .findFirst()
+                .orElse(null);
+
+        // If the balance does not exist, create a new one
+        if (accountBalance == null) {
+            log.debug("Creating a new balance");
+            accountBalance = buildAccountBalanceEntity(account, amount, currency, createdBy);
+            accountBalances.add(accountBalance);
+        } else {
+            // Update the balance
+            log.debug("Updating balance");
+            accountBalance.setBalance(accountBalance.getBalance().add(amount));
+            accountBalance.setLastModifiedBy(createdBy);
+            accountBalance.setLastModifiedAt(LocalDateTime.now());
+        }
+
+        log.debug("Saving account balances");
+        saveAllAccountBalances(accountBalances);
+    }
+
 
     /**
      * Fetches account balances for the provided accounts.
