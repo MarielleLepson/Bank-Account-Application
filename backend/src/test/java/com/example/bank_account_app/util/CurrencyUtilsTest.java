@@ -26,4 +26,13 @@ class CurrencyUtilsTest {
         }
     }
 
+    @Test
+    void testGetSupportedCurrencies() {
+        List<Currency> supportedCurrencies = CurrencyUtils.getSupportedCurrencies();
+        List<Currency> availableCurrencies = List.of(Currency.values());
+
+        assertNotNull(supportedCurrencies);
+        assertTrue(supportedCurrencies.containsAll(availableCurrencies));
+    }
+
 }

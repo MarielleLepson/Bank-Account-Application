@@ -1,6 +1,10 @@
 package com.example.bank_account_app.service;
 
+import com.example.bank_account_app.dto.AccountBalanceDTO;
+import com.example.bank_account_app.dto.CreditBalanceDTO;
+import com.example.bank_account_app.dto.DebitBalanceDTO;
 import com.example.bank_account_app.enums.Currency;
+import com.example.bank_account_app.exceptions.InsufficientBalanceException;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
@@ -14,6 +18,7 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,5 +114,173 @@ class AccountBalanceServiceTest {
 
         assertEquals(5, count);
         verify(accountBalanceRepository, times(1)).count();
+    }
+
+    @Test
+    void shouldTestCreatingAccountBalanceDTO() {
+        Account account = new Account();
+
+        AccountBalance accountBalance = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(100))
+            .currency(Currency.EUR)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        AccountBalance accountBalance2 = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(200))
+            .currency(Currency.USD)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        List<AccountBalance> accountBalances = List.of(
+            accountBalance,
+            accountBalance2
+        );
+        AccountBalanceDTO accountBalanceDTO = accountBalanceService.mapAccountBalancesToDTO(accountBalances, account);
+
+        assertNotNull(accountBalanceDTO);
+        assertEquals(5, accountBalanceDTO.getCurrencyBalances().size());
+        assertEquals(account.getAccountNumber(), accountBalanceDTO.getAccountNumber());
+        assertEquals("EUR", accountBalanceDTO.getCurrencyBalances().get(0).getCurrency());
+        assertEquals("100", accountBalanceDTO.getCurrencyBalances().get(0).getBalance());
+        assertEquals("USD", accountBalanceDTO.getCurrencyBalances().get(1).getCurrency());
+        assertEquals("200", accountBalanceDTO.getCurrencyBalances().get(1).getBalance());
+    }
+
+
+    @Test
+    void shouldTestGettingAccountBalances() {
+        Account account = new Account();
+        AccountBalance accountBalance = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(100))
+            .currency(Currency.EUR)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        AccountBalance accountBalance2 = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(200))
+            .currency(Currency.USD)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        List<AccountBalance> accountBalances = List.of(
+            accountBalance,
+            accountBalance2
+        );
+
+        when(accountBalanceRepository.findAllByAccountId(account.getId())).thenReturn(accountBalances);
+
+        List<AccountBalance> accountBalancesResult = accountBalanceService.getAccountBalances(account);
+
+        assertNotNull(accountBalancesResult);
+        assertEquals(2, accountBalancesResult.size());
+        assertEquals(accountBalance, accountBalancesResult.get(0));
+        assertEquals(accountBalance2, accountBalancesResult.get(1));
+    }
+
+    @Test
+    void shouldTestIsBalanceSufficient() {
+        AccountBalance accountBalance = AccountBalance.builder()
+            .balance(BigDecimal.valueOf(100))
+            .build();
+
+        assertTrue(accountBalanceService.isBalanceSufficient(BigDecimal.valueOf(50), accountBalance));
+        assertFalse(accountBalanceService.isBalanceSufficient(BigDecimal.valueOf(150), accountBalance));
+    }
+
+    @Test
+    void shouldTestIsBalanceSufficientWithZeroBalance() {
+        AccountBalance accountBalance = AccountBalance.builder()
+            .balance(BigDecimal.ZERO)
+            .build();
+
+        assertFalse(accountBalanceService.isBalanceSufficient(BigDecimal.valueOf(50), accountBalance));
+    }
+
+    @Test
+    void shouldTestIsBalanceSufficientWithNegativeBalance() {
+        AccountBalance accountBalance = AccountBalance.builder()
+            .balance(BigDecimal.valueOf(-50))
+            .build();
+
+        assertFalse(accountBalanceService.isBalanceSufficient(BigDecimal.valueOf(50), accountBalance));
+    }
+
+    // test debit money
+    @Test
+    void shouldTestDebitMoney() {
+        Account account = new Account();
+        AccountBalance accountBalance = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(100))
+            .currency(Currency.EUR)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        List<AccountBalance> accountBalances = List.of(accountBalance);
+
+        when(accountBalanceRepository.findAllByAccountId(account.getId())).thenReturn(accountBalances);
+
+        accountBalanceService.debitMoney(account, new DebitBalanceDTO("Mari Maasikas",Currency.EUR, 50), "test user");
+
+        verify(accountBalanceRepository, times(1)).findAllByAccountId(account.getId());
+        verify(accountBalanceRepository, times(1)).saveAllAndFlush(accountBalances);
+        assertEquals(BigDecimal.valueOf(50.0), accountBalance.getBalance());
+    }
+
+    @Test
+    void shouldTestDebitMoneyWithInsufficientBalance() {
+        Account account = new Account();
+        AccountBalance accountBalance = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(100))
+            .currency(Currency.EUR)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        List<AccountBalance> accountBalances = List.of(accountBalance);
+
+        when(accountBalanceRepository.findAllByAccountId(account.getId())).thenReturn(accountBalances);
+
+        assertThrows(InsufficientBalanceException.class, () -> {
+            accountBalanceService.debitMoney(account, new DebitBalanceDTO("Mari Maasikas",Currency.EUR, 150), "test user");
+        });
+
+        verify(accountBalanceRepository, times(1)).findAllByAccountId(account.getId());
+        verify(accountBalanceRepository, times(0)).saveAllAndFlush(accountBalances);
+        assertEquals(BigDecimal.valueOf(100), accountBalance.getBalance());
+    }
+
+
+    @Test
+    void shouldTestCreditMoney() {
+        Account account = new Account();
+        AccountBalance accountBalance = AccountBalance.builder()
+            .account(account)
+            .balance(BigDecimal.valueOf(100))
+            .currency(Currency.EUR)
+            .createdAt(LocalDateTime.now())
+            .createdBy("test user")
+            .build();
+
+        List<AccountBalance> accountBalances = List.of(accountBalance);
+
+        when(accountBalanceRepository.findAllByAccountId(account.getId())).thenReturn(accountBalances);
+
+        accountBalanceService.creditMoney(account, new CreditBalanceDTO("Mari Maasikas",Currency.EUR, 50), "test user");
+
+        verify(accountBalanceRepository, times(1)).findAllByAccountId(account.getId());
+        verify(accountBalanceRepository, times(1)).saveAllAndFlush(accountBalances);
+        assertEquals(BigDecimal.valueOf(150.0), accountBalance.getBalance());
     }
 }

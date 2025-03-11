@@ -24,8 +24,8 @@ logging:
 
 bank-account-app:
   currency-exchange:
-    endpoint: "https://open.er-api.com/v6/latest/"
+    endpoint: "https://open.er-api.com/v6/latest/" # Documentation: https://www.exchangerate-api.com/docs/free
 
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html # TODO: MLe: Remove later: http://localhost:8080/swagger-ui/index.html
+    path: /swagger-ui.html # TODO: MLe: Swagger accessible: http://localhost:8080/swagger-ui/index.html

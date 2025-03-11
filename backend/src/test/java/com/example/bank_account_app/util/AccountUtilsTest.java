@@ -32,5 +32,29 @@ class AccountUtilsTest {
         assertFalse(AccountUtils.isValidAccountNumber(missingPrefix), "Account number missing 'EE' should be invalid");
         assertFalse(AccountUtils.isValidAccountNumber(nullAccountNumber), "Null account number should be invalid");
     }
+
+    @Test
+    void shouldValidateCorrectAccountHolder() {
+        String validAccountHolder = "John Doe";
+        String validAccountHolderWithHyphen = "John-Doe";
+
+        assertTrue(AccountUtils.isValidAccountHolder(validAccountHolder), "Valid account holder should be recognized");
+        assertTrue(AccountUtils.isValidAccountHolder(validAccountHolderWithHyphen), "Valid account holder with hyphen should be recognized");
+    }
+
+    @Test
+    void shouldInvalidateIncorrectAccountHolder() {
+        String invalidAccountHolder = "John Doe123";
+        String invalidAccountHolderWithSpecialCharacter = "John@Doe";
+        String nullAccountHolder = null;
+        String emptyAccountHolder = "";
+
+        assertFalse(AccountUtils.isValidAccountHolder(invalidAccountHolder), "Invalid account holder should be invalid");
+        assertFalse(AccountUtils.isValidAccountHolder(invalidAccountHolderWithSpecialCharacter), "Invalid account holder with special character should be invalid");
+        assertFalse(AccountUtils.isValidAccountHolder(nullAccountHolder), "Null account holder should be invalid");
+        assertFalse(AccountUtils.isValidAccountHolder(emptyAccountHolder), "Empty account holder should be invalid");
+    }
+
+
 }
 

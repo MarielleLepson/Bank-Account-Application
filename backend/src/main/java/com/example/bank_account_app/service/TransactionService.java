@@ -1,10 +1,6 @@
 package com.example.bank_account_app.service;
 
 import com.example.bank_account_app.dto.TransactionCommand;
-import com.example.bank_account_app.enums.Currency;
-import com.example.bank_account_app.enums.TransactionType;
-import com.example.bank_account_app.model.Account;
-import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.model.Transaction;
 import com.example.bank_account_app.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,21 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-
-
-    /**
-     * Fetches all transactions from the database.
-     */
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
-    }
 
     /**
      * Save transaction to the database.
