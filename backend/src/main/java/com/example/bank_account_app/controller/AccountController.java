@@ -63,7 +63,7 @@ public class AccountController {
     public ResponseEntity<?> getAccountByNumber(
             @Parameter(description = "Bank account number", example = "EE123456789012345678")
             @PathVariable String accountNumber) {
-        log.info("Fetching account with account number: {}", accountNumber);
+        log.info("Fetching account by account number");
 
         // Validate account number
         if (!AccountUtils.isValidAccountNumber(accountNumber)) { // Validate account number

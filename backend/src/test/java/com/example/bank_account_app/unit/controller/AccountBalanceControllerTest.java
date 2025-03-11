@@ -157,7 +157,7 @@ public class AccountBalanceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Deposit successful"));
+                .andExpect(content().string("Deposit/Credit successful"));
     }
 
     @Test

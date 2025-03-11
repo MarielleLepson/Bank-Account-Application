@@ -118,7 +118,7 @@ public class AccountBalanceController {
         transactionService.createNewTransaction(cmd);
 
         log.info("Deposit successful");
-        return ResponseEntity.ok("Deposit successful");
+        return ResponseEntity.ok("Deposit/Credit successful");
     }
 
 
