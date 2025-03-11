@@ -12,7 +12,6 @@ import java.util.List;
  */
 @Repository
 public interface AccountBalanceRepository extends JpaRepository<AccountBalance, Long> {
-
     // find all account balances by account id
     List<AccountBalance> findAllByAccountId(int accountId);
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BalanceUtils {
     /**
-     * Generates a random balance that currency (e.g. 0-1000 for EUR).
+     * Generates a random balance for currency (e.g. 0-1000 for EUR).
      */
     public static double generateRandomBalance(Currency currency) {
         if (currency == null) {
@@ -21,7 +21,6 @@ public class BalanceUtils {
             case RUB -> Math.random() * 100000;
             case KRW -> Math.random() * 1000000;
             default -> throw new IllegalArgumentException("Unsupported currency provided");
-
         };
     }
 }

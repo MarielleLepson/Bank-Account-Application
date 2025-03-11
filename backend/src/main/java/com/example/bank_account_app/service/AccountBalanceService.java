@@ -174,6 +174,9 @@ public class AccountBalanceService {
         return buildAccountBalanceEntity(account, BigDecimal.valueOf(balance), currency, createdBy);
     }
 
+    /**
+     * Count the number of account balances.
+     */
     public int countAccountBalances() {
         return (int) accountBalanceRepository.count();
     }
