@@ -1,4 +1,4 @@
-package com.example.bank_account_app.service;
+package com.example.bank_account_app.unit.service;
 
 import com.example.bank_account_app.enums.Currency;
 import com.example.bank_account_app.exceptions.BalanceNotFoundException;
@@ -6,6 +6,9 @@ import com.example.bank_account_app.exceptions.InsufficientBalanceException;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
+import com.example.bank_account_app.service.AccountBalanceService;
+import com.example.bank_account_app.service.CurrencyExchangeService;
+import com.example.bank_account_app.service.ExternalAPIService;
 import com.example.bank_account_app.util.ExchangeRateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

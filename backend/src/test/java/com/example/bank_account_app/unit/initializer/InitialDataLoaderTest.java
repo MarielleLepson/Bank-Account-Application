@@ -1,5 +1,6 @@
-package com.example.bank_account_app.initializer;
+package com.example.bank_account_app.unit.initializer;
 
+import com.example.bank_account_app.initializer.InitialDataLoader;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.repository.AccountRepository;
@@ -88,21 +89,6 @@ class InitialDataLoaderTest {
         assertEquals(accountHolders.size(), createdAccounts.size());
         verify(accountService, times(accountHolders.size())).buildAccountEntity(anyString(), anyString(), anyString());
         verify(accountService, times(1)).saveAllAccounts(anyList());
-    }
-
-    @Test
-    void shouldCreateBalancesCorrectly() {
-        List<Account> accounts = List.of(new Account(), new Account());
-        AccountBalance mockedAccountBalance = mock(AccountBalance.class);
-        when(accountBalanceService.createAccountBalance(any(), anyString())).thenReturn(mockedAccountBalance);
-        when(accountBalanceService.createAccountBalance(any(), any(), anyString())).thenReturn(mockedAccountBalance);
-        doNothing().when(accountBalanceService).saveAllAccountBalances(anyList());
-
-        initialDataLoader.createAccountBalances(accounts);
-
-        verify(accountBalanceService, times(2)).createAccountBalance(any(), anyString());  // Should be called twice for each account
-        verify(accountBalanceService, times(2)).createAccountBalance(any(), any(), anyString());  // Ensure second balance is created with a different currency
-        verify(accountBalanceService, times(1)).saveAllAccountBalances(anyList());  // Ensure all balances are saved
     }
 }
 

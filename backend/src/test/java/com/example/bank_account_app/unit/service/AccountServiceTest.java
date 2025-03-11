@@ -1,8 +1,9 @@
-package com.example.bank_account_app.service;
+package com.example.bank_account_app.unit.service;
 
 import com.example.bank_account_app.dto.AccountDTO;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.repository.AccountRepository;
+import com.example.bank_account_app.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -51,7 +52,7 @@ class AccountServiceTest {
     @Test
     void shouldBuildAccountEntity() {
         String accountNumber = "EE123456789012345678";
-        String accountHolder = "John Doe";
+        String accountHolder = "Mari Maasikas";
         String createdBy = "test user";
 
         Account account = accountService.buildAccountEntity(accountNumber, accountHolder, createdBy);
@@ -66,7 +67,7 @@ class AccountServiceTest {
     void shouldMapAccountToDTO() {
         Account account = new Account();
         account.setAccountNumber("EE123456789012345678");
-        account.setAccountHolder("John Doe");
+        account.setAccountHolder("Mari Maasikas");
         account.setCreatedBy("test user");
 
         AccountDTO accountDTO = accountService.mapAccountToDTO(account);

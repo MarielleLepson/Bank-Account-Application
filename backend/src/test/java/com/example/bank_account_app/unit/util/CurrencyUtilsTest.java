@@ -1,6 +1,7 @@
-package com.example.bank_account_app.util;
+package com.example.bank_account_app.unit.util;
 
 import com.example.bank_account_app.enums.Currency;
+import com.example.bank_account_app.util.CurrencyUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

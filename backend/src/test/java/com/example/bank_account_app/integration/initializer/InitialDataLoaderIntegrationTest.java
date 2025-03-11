@@ -1,5 +1,6 @@
-package com.example.bank_account_app.initializer;
+package com.example.bank_account_app.integration.initializer;
 
+import com.example.bank_account_app.initializer.InitialDataLoader;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
 import com.example.bank_account_app.repository.AccountRepository;
@@ -13,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @SpringBootTest
-class InitialDataLoaderIT {
+@ActiveProfiles("test")
+class InitialDataLoaderIntegrationTest {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -43,7 +46,7 @@ class InitialDataLoaderIT {
     void shouldSkipDataLoadWhenAccountsExist() {
         Account account = new Account();
         account.setAccountNumber("EE123456789012345678");
-        account.setAccountHolder("John Doe");
+        account.setAccountHolder("Mari Maasikas");
         account.setCreatedBy("integration test");
         accountRepository.save(account);
 
@@ -77,7 +80,7 @@ class InitialDataLoaderIT {
     @Test
     void shouldCreateBalancesCorrectly() {
         List<Account> accounts = List.of(
-                accountService.buildAccountEntity("EE123456789012345678", "John Doe", "integration test"),
+                accountService.buildAccountEntity("EE123456789012345678", "Mari Maasikas", "integration test"),
                 accountService.buildAccountEntity("EE123456789012345679", "Jane Doe", "integration test")
         );
         accountRepository.saveAll(accounts);

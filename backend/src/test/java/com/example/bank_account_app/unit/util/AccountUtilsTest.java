@@ -1,5 +1,6 @@
-package com.example.bank_account_app.util;
+package com.example.bank_account_app.unit.util;
 
+import com.example.bank_account_app.util.AccountUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +36,7 @@ class AccountUtilsTest {
 
     @Test
     void shouldValidateCorrectAccountHolder() {
-        String validAccountHolder = "John Doe";
+        String validAccountHolder = "Mari Maasikas";
         String validAccountHolderWithHyphen = "John-Doe";
 
         assertTrue(AccountUtils.isValidAccountHolder(validAccountHolder), "Valid account holder should be recognized");
@@ -44,7 +45,7 @@ class AccountUtilsTest {
 
     @Test
     void shouldInvalidateIncorrectAccountHolder() {
-        String invalidAccountHolder = "John Doe123";
+        String invalidAccountHolder = "Mari Maasikas123";
         String invalidAccountHolderWithSpecialCharacter = "John@Doe";
         String nullAccountHolder = null;
         String emptyAccountHolder = "";

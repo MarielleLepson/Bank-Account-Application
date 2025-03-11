@@ -1,7 +1,8 @@
-package com.example.bank_account_app.util;
+package com.example.bank_account_app.unit.util;
 
 
 import com.example.bank_account_app.enums.Currency;
+import com.example.bank_account_app.util.ExchangeRateUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

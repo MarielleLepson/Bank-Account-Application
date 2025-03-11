@@ -1,4 +1,4 @@
-package com.example.bank_account_app.service;
+package com.example.bank_account_app.unit.service;
 
 import com.example.bank_account_app.dto.TransactionCommand;
 import com.example.bank_account_app.enums.Currency;
@@ -6,6 +6,7 @@ import com.example.bank_account_app.enums.TransactionType;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.Transaction;
 import com.example.bank_account_app.repository.TransactionRepository;
+import com.example.bank_account_app.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

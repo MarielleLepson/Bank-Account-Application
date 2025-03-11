@@ -1,4 +1,4 @@
-package com.example.bank_account_app.service;
+package com.example.bank_account_app.unit.service;
 
 import com.example.bank_account_app.dto.AccountBalanceDTO;
 import com.example.bank_account_app.dto.CreditBalanceDTO;
@@ -8,6 +8,7 @@ import com.example.bank_account_app.exceptions.InsufficientBalanceException;
 import com.example.bank_account_app.model.Account;
 import com.example.bank_account_app.model.AccountBalance;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
+import com.example.bank_account_app.service.AccountBalanceService;
 import com.example.bank_account_app.util.BalanceUtils;
 import com.example.bank_account_app.util.CurrencyUtils;
 import org.junit.jupiter.api.BeforeEach;

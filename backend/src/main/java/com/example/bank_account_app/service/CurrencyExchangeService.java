@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -128,9 +129,12 @@ public class CurrencyExchangeService {
      * Build the response DTO with updated balances
      */
     private AccountBalanceDTO buildAccountBalanceDTO(Account account, AccountBalance fromBalance, AccountBalance toBalance) {
+        BigDecimal fromBalanceRounded = fromBalance.getBalance().setScale(2, RoundingMode.HALF_UP);
+        BigDecimal toBalanceRounded = toBalance.getBalance().setScale(2, RoundingMode.HALF_UP);
+
         return new AccountBalanceDTO(account.getAccountNumber(), List.of(
-                new CurrencyBalance(fromBalance.getCurrency().name(), fromBalance.getBalance().toString()),
-                new CurrencyBalance(toBalance.getCurrency().name(), toBalance.getBalance().toString())
+                new CurrencyBalance(fromBalance.getCurrency().name(), fromBalanceRounded.toString()),
+                new CurrencyBalance(toBalance.getCurrency().name(), toBalanceRounded.toString())
         ));
     }
 }

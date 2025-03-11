@@ -31,7 +31,7 @@ public class InitialDataLoader implements ApplicationRunner {
     private final AccountBalanceService accountBalanceService;
 
     private static final String DATA_LOADED_BY = "initial data loader";
-    boolean alreadySetup = false;
+    public boolean alreadySetup = false;
 
     /**
      * Creates initial bank account data if the database is empty.
