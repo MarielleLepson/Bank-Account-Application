@@ -1,10 +1,9 @@
 package com.example.bank_account_app.integration.controller;
 
 import com.example.bank_account_app.dto.CreditBalanceDTO;
-import com.example.bank_account_app.dto.DebitBalanceDTO;
+import com.example.bank_account_app.dto.ExchangeCurrencyDTO;
 import com.example.bank_account_app.enums.Currency;
 import com.example.bank_account_app.model.Account;
-import com.example.bank_account_app.model.Transaction;
 import com.example.bank_account_app.repository.AccountBalanceRepository;
 import com.example.bank_account_app.repository.AccountRepository;
 import com.example.bank_account_app.repository.TransactionRepository;
@@ -18,14 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import java.math.BigDecimal;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class AccountBalanceControllerIntegrationTest {
+class CurrencyExchangeControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,44 +57,14 @@ class AccountBalanceControllerIntegrationTest {
     }
 
     @Test
-    void testGetAccountBalance_InvalidAccountNumber() throws Exception {
-        mockMvc.perform(get("/api/account-balance/invalid"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid account number"));
-    }
+    void testExchangeCurrency_Floating_Success() throws Exception {
+        ExchangeCurrencyDTO dto = new ExchangeCurrencyDTO();
+        dto.setAccountNumber(account.getAccountNumber());
+        dto.setFromCurrency(Currency.USD);
+        dto.setToCurrency(Currency.EUR);
+        dto.setAmount(new BigDecimal("100.00"));
+        String json = objectMapper.writeValueAsString(dto);
 
-    @Test
-    void testGetAccountBalance_AccountNotFound() throws Exception {
-        String nonExisting = "EE000000000000000000";
-        mockMvc.perform(get("/api/account-balance/" + nonExisting))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Account not found"));
-    }
-
-    @Test
-    void testGetAccountBalance_Success() throws Exception {
-        mockMvc.perform(get("/api/account-balance/" + account.getAccountNumber()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()));
-    }
-
-    @Test
-    void testDepositMoney_Success() throws Exception {
-        CreditBalanceDTO creditDTO = new CreditBalanceDTO();
-        creditDTO.setAccountNumber(account.getAccountNumber());
-        creditDTO.setAmount(100.0);
-        creditDTO.setCurrency(Currency.USD);
-        String json = objectMapper.writeValueAsString(creditDTO);
-
-        mockMvc.perform(post("/api/account-balance/credit")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Deposit successful"));
-    }
-
-    @Test
-    void testDebitMoney_Success() throws Exception {
         CreditBalanceDTO creditDTO = new CreditBalanceDTO();
         creditDTO.setAccountNumber(account.getAccountNumber());
         creditDTO.setAmount(100.0);
@@ -102,22 +72,49 @@ class AccountBalanceControllerIntegrationTest {
         String creditJson = objectMapper.writeValueAsString(creditDTO);
 
         mockMvc.perform(post("/api/account-balance/credit")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(creditJson))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Deposit successful"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(creditJson));
 
-        DebitBalanceDTO debitDTO = new DebitBalanceDTO();
-        debitDTO.setAccountNumber(account.getAccountNumber());
-        debitDTO.setAmount(50.0);
-        debitDTO.setCurrency(Currency.USD);
-        String debitJson = objectMapper.writeValueAsString(debitDTO);
 
-        mockMvc.perform(post("/api/account-balance/debit")
+        mockMvc.perform(post("/api/currency-exchange/floating")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(debitJson))
+                        .content(json))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Debit successful"));
+                .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()));
+    }
+
+    @Test
+    void testExchangeCurrency_Fixed_Success() throws Exception {
+        // if the rate is  Currency.USD, to Currency.EUR, 0.91,
+        ExchangeCurrencyDTO dto = new ExchangeCurrencyDTO();
+        dto.setAccountNumber(account.getAccountNumber());
+        dto.setFromCurrency(Currency.USD);
+        dto.setToCurrency(Currency.EUR);
+        dto.setAmount(new BigDecimal("100.00"));
+        String json = objectMapper.writeValueAsString(dto);
+
+        CreditBalanceDTO creditDTO = new CreditBalanceDTO();
+        creditDTO.setAccountNumber(account.getAccountNumber());
+        creditDTO.setAmount(100.0);
+        creditDTO.setCurrency(Currency.USD);
+        String creditJson = objectMapper.writeValueAsString(creditDTO);
+
+        mockMvc.perform(post("/api/account-balance/credit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(creditJson));
+
+        mockMvc.perform(post("/api/currency-exchange/fixed")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()))
+                .andExpect(jsonPath("$.currencyBalances[0].currency").value(Currency.USD.name()))
+                .andExpect(jsonPath("$.currencyBalances[0].balance").value("9.00"))
+                .andExpect(jsonPath("$.currencyBalances[1].currency").value(Currency.EUR.name()))
+                .andExpect(jsonPath("$.currencyBalances[1].balance").value("91.00"));
+
+
+
     }
 }
 

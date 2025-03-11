@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class InitialDataLoaderIntegrationTest {
+class InitialDataLoaderIT {
 
     @Autowired
     private AccountRepository accountRepository;
