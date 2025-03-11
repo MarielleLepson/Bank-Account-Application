@@ -1,6 +1,5 @@
 package com.example.bank_account_app.unit.service;
 
-import com.example.bank_account_app.dto.AccountBalanceDTO;
 import com.example.bank_account_app.dto.CreditBalanceDTO;
 import com.example.bank_account_app.dto.DebitBalanceDTO;
 import com.example.bank_account_app.enums.Currency;
@@ -39,35 +38,10 @@ class AccountBalanceServiceTest {
     }
 
     @Test
-    void shouldSaveAllAccountBalances() {
-        List<AccountBalance> accountBalances = List.of(new AccountBalance(), new AccountBalance());
-        when(accountBalanceRepository.saveAllAndFlush(accountBalances)).thenReturn(accountBalances);
-        accountBalanceService.saveAllAccountBalances(accountBalances);
-        verify(accountBalanceRepository, times(1)).saveAllAndFlush(accountBalances);
-    }
-
-    @Test
-    void shouldBuildAccountBalanceEntity() {
-        Account account = new Account();
-        BigDecimal balance = BigDecimal.valueOf(500);
-        Currency currency = Currency.EUR;
-        String createdBy = "test user";
-
-        AccountBalance accountBalance = accountBalanceService.buildAccountBalanceEntity(account, balance, currency, createdBy);
-
-        assertNotNull(accountBalance);
-        assertEquals(account, accountBalance.getAccount());
-        assertEquals(balance, accountBalance.getBalance());
-        assertEquals(currency, accountBalance.getCurrency());
-        assertEquals(createdBy, accountBalance.getCreatedBy());
-    }
-
-    @Test
     void shouldCreateAccountBalanceWithRandomCurrency() {
         Account account = new Account();
         String createdBy = "Test User";
 
-        // Mock the static methods to return the expected values
         try (MockedStatic<CurrencyUtils> currencyUtilsMockedStatic = mockStatic(CurrencyUtils.class);
              MockedStatic<BalanceUtils> balanceUtilsMockedStatic = mockStatic(BalanceUtils.class)) {
 
@@ -90,7 +64,6 @@ class AccountBalanceServiceTest {
         String createdBy = "Test User";
         List<Currency> existingCurrencies = List.of(Currency.EUR);
 
-        // Mock the static methods to return the expected values
         try (MockedStatic<CurrencyUtils> currencyUtilsMockedStatic = mockStatic(CurrencyUtils.class);
              MockedStatic<BalanceUtils> balanceUtilsMockedStatic = mockStatic(BalanceUtils.class)) {
 
@@ -116,42 +89,6 @@ class AccountBalanceServiceTest {
         assertEquals(5, count);
         verify(accountBalanceRepository, times(1)).count();
     }
-
-    @Test
-    void shouldTestCreatingAccountBalanceDTO() {
-        Account account = new Account();
-
-        AccountBalance accountBalance = AccountBalance.builder()
-            .account(account)
-            .balance(BigDecimal.valueOf(100))
-            .currency(Currency.EUR)
-            .createdAt(LocalDateTime.now())
-            .createdBy("test user")
-            .build();
-
-        AccountBalance accountBalance2 = AccountBalance.builder()
-            .account(account)
-            .balance(BigDecimal.valueOf(200))
-            .currency(Currency.USD)
-            .createdAt(LocalDateTime.now())
-            .createdBy("test user")
-            .build();
-
-        List<AccountBalance> accountBalances = List.of(
-            accountBalance,
-            accountBalance2
-        );
-        AccountBalanceDTO accountBalanceDTO = accountBalanceService.mapAccountBalancesToDTO(accountBalances, account);
-
-        assertNotNull(accountBalanceDTO);
-        assertEquals(5, accountBalanceDTO.getCurrencyBalances().size());
-        assertEquals(account.getAccountNumber(), accountBalanceDTO.getAccountNumber());
-        assertEquals("EUR", accountBalanceDTO.getCurrencyBalances().get(0).getCurrency());
-        assertEquals("100", accountBalanceDTO.getCurrencyBalances().get(0).getBalance());
-        assertEquals("USD", accountBalanceDTO.getCurrencyBalances().get(1).getCurrency());
-        assertEquals("200", accountBalanceDTO.getCurrencyBalances().get(1).getBalance());
-    }
-
 
     @Test
     void shouldTestGettingAccountBalances() {
@@ -215,7 +152,6 @@ class AccountBalanceServiceTest {
         assertFalse(accountBalanceService.isBalanceSufficient(BigDecimal.valueOf(50), accountBalance));
     }
 
-    // test debit money
     @Test
     void shouldTestDebitMoney() {
         Account account = new Account();

@@ -40,7 +40,6 @@ public class AccountControllerTest {
 
     @Test
     void testGetAllAccounts() throws Exception {
-        // Prepare dummy account and its DTO mapping.
         Account account = new Account();
         account.setAccountNumber("EE123456789012345678");
         List<Account> accounts = Collections.singletonList(account);
@@ -60,7 +59,6 @@ public class AccountControllerTest {
 
     @Test
     void testGetAccountByNumber_InvalidAccountNumber() throws Exception {
-        // For an invalid account number, the controller returns BAD_REQUEST.
         String invalidAccountNumber = "invalid";
         mockMvc.perform(get("/api/account/" + invalidAccountNumber))
                 .andExpect(status().isBadRequest())
@@ -69,7 +67,6 @@ public class AccountControllerTest {
 
     @Test
     void testGetAccountByNumber_NotFound() throws Exception {
-        // Assume a valid account number per AccountUtils.
         String accountNumber = "EE123456789012345678";
         when(accountService.getAccountByAccountNumber(accountNumber)).thenReturn(null);
 
@@ -96,7 +93,6 @@ public class AccountControllerTest {
 
     @Test
     void testCreateAccount_InvalidAccountHolder() throws Exception {
-        // Use an account holder name that should be flagged as invalid.
         CreateAccountDTO createAccountDTO = new CreateAccountDTO();
         createAccountDTO.setAccountHolder("Invalid123");
         String json = objectMapper.writeValueAsString(createAccountDTO);

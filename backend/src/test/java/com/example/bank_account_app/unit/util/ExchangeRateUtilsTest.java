@@ -30,7 +30,7 @@ class ExchangeRateUtilsTest {
     }
 
     @Test
-    void testGetExchangeRateForDifferentCurrency2() {
+    void testGetExchangeRateForDifferentCurrencyV2() {
         Currency from = Currency.USD;
         Currency to = Currency.EUR;
         double expected = 0.91;

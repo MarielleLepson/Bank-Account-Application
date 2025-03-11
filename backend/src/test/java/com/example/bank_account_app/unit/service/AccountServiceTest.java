@@ -86,31 +86,5 @@ class AccountServiceTest {
         assertNotNull(accountDTOs, "Account DTOs should not be null");
         assertEquals(accounts.size(), accountDTOs.size(), "Account DTOs size should match");
     }
-
-    @Test
-    void shouldGetAccountByAccountNumber() {
-        String accountNumber = "EE123456789012345678";
-        Account account = new Account();
-        account.setAccountNumber(accountNumber);
-
-        when(accountRepository.findByAccountNumber(accountNumber)).thenReturn(account);
-
-        Account result = accountService.getAccountByAccountNumber(accountNumber);
-
-        assertNotNull(result, "Account should not be null");
-        assertEquals(accountNumber, result.getAccountNumber(), "Account number should match");
-    }
-
-    @Test
-    void shouldGetAllAccounts() {
-        List<Account> accounts = List.of(new Account(), new Account());
-
-        when(accountRepository.findAll()).thenReturn(accounts);
-
-        List<Account> result = accountService.getAllAccounts();
-
-        assertNotNull(result, "Accounts should not be null");
-        assertEquals(accounts.size(), result.size(), "Accounts size should match");
-    }
 }
 

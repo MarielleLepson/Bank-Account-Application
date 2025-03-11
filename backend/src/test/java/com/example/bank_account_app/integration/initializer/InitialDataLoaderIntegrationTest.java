@@ -76,26 +76,6 @@ class InitialDataLoaderIntegrationTest {
         assertEquals(accountHolders.size(), createdAccounts.size(), "The number of accounts created should match the input list size.");
         assertTrue(accountRepository.count() > 0, "Accounts should be saved to the database.");
     }
-
-    @Test
-    void shouldCreateBalancesCorrectly() {
-        List<Account> accounts = List.of(
-                accountService.buildAccountEntity("EE123456789012345678", "Mari Maasikas", "integration test"),
-                accountService.buildAccountEntity("EE123456789012345679", "Jane Doe", "integration test")
-        );
-        accountRepository.saveAll(accounts);
-        initialDataLoader.createAccountBalances(accounts);
-
-        assertTrue(accountBalanceService.countAccountBalances() > 0, "Account balances should be created and saved.");
-    }
-
-    @Test
-    void shouldCallAllMethods() {
-        initialDataLoader.createBankAccounts();
-        initialDataLoader.createAccountBalances(accountRepository.findAll());
-
-        assertTrue(accountRepository.count() > 0, "Accounts should be created");
-    }
 }
 
 

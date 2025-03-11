@@ -37,7 +37,7 @@ class AccountUtilsTest {
     @Test
     void shouldValidateCorrectAccountHolder() {
         String validAccountHolder = "Mari Maasikas";
-        String validAccountHolderWithHyphen = "John-Doe";
+        String validAccountHolderWithHyphen = "Jaak-Mae";
 
         assertTrue(AccountUtils.isValidAccountHolder(validAccountHolder), "Valid account holder should be recognized");
         assertTrue(AccountUtils.isValidAccountHolder(validAccountHolderWithHyphen), "Valid account holder with hyphen should be recognized");
@@ -46,7 +46,7 @@ class AccountUtilsTest {
     @Test
     void shouldInvalidateIncorrectAccountHolder() {
         String invalidAccountHolder = "Mari Maasikas123";
-        String invalidAccountHolderWithSpecialCharacter = "John@Doe";
+        String invalidAccountHolderWithSpecialCharacter = "Jaak@Mae";
         String nullAccountHolder = null;
         String emptyAccountHolder = "";
 

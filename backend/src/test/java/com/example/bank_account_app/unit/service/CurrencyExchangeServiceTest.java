@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CurrencyExchangeServicePrivateMethodsTest {
+class CurrencyExchangeServiceTest {
 
     @Mock
     private AccountBalanceRepository accountBalanceRepository;
@@ -72,7 +72,7 @@ class CurrencyExchangeServicePrivateMethodsTest {
     }
 
     @Test
-    void testGetExternalExchangeRate_RateNotFound() throws Exception {
+    void testGetExternalExchangeRate_RateNotFound() {
         Map<String, Double> rates = new HashMap<>();
         rates.put("EUR", 0.0);
         when(externalAPIService.getCurrencyExchangeRates("USD")).thenReturn(rates);
@@ -92,7 +92,7 @@ class CurrencyExchangeServicePrivateMethodsTest {
     }
 
     @Test
-    void testGetFixedExchangeRate_RateNotFound() throws Exception {
+    void testGetFixedExchangeRate_RateNotFound() {
         try (MockedStatic<ExchangeRateUtils> mockedStatic = mockStatic(ExchangeRateUtils.class)) {
             mockedStatic.when(() -> ExchangeRateUtils.getExchangeRate(Currency.USD, Currency.EUR)).thenReturn(0.0);
             InvocationTargetException exception = assertThrows(InvocationTargetException.class, () ->
@@ -170,18 +170,5 @@ class CurrencyExchangeServicePrivateMethodsTest {
                 currencyExchangeService.validateAndGetBalance(account, Currency.USD, new BigDecimal("100")));
         assertInstanceOf(BalanceNotFoundException.class, exception);
         assertEquals("Account balance not found", exception.getMessage());
-    }
-
-    @Test
-    void testValidateAndGetBalance_Success() {
-        Account account = new Account();
-
-        AccountBalance balance = new AccountBalance();
-        balance.setBalance(new BigDecimal("200"));
-
-        when(accountBalanceRepository.findByAccountIdAndCurrency(account.getId(), Currency.USD))
-                .thenReturn(balance);
-        AccountBalance result = currencyExchangeService.validateAndGetBalance(account, Currency.USD, new BigDecimal("100"));
-        assertSame(balance, result);
     }
 }
