@@ -3,7 +3,8 @@
 ## Description
 The application is primarily focused on managing bank accounts. It provides endpoints to view account balances, debit and credit money, and perform currency conversions. For currency conversion, users have two options: one endpoint uses a fixed conversion rate configured in the system, while another endpoint retrieves the latest conversion rates from an external API. The API is built using Java and the Spring Framework (with Spring Boot) and is using h2 embedded database.
 
-This is currently primarly only backend project. 
+> This project is primarily a backend application.
+
 
 ## Technologies
 - Java 21
@@ -15,31 +16,37 @@ This is currently primarly only backend project.
 - JUnit (for testing)
 - Mockito (for mocking in tests)
 - Swagger (for API documentation)
-- Lombok (for reducing boilerplate code)
+- Lombok 
 - Jackson (for JSON processing)
 
 ## Setup instructions
 
-1. Clone project repo to you local computer ( For example with ssh )
+1. Clone the repository  
+Clone the project to your local computer using SSH / HTTPS:
 ```
 git clone git@github.com:MarielleLepson/bank-account-application.git
 ```
 
-2. Open terminal 
-3. Move to project root folder -> then to backend folder
+2. Navigate to the project folder  
+Open a terminal and move into the project’s backend folder:
 ```
 cd backend
 ```
-5. Build docker image. For the first time it might take longer time because it needs to download all dependencies.
+
+3. Build the Docker image  
+Build the Docker image (the initial build may take longer as dependencies are downloaded):  
 ```
 docker build -t bank-account-app .
 ```
-5. Run docker container
+4. Run the Docker container  
+Run the container by mapping port 8080:
 ```
 docker run -p 8080:8080 bank-account-app
 ```
 
-6. Now the application should be running. You can view and start testing with swagger: http://localhost:8080/swagger-ui/index.html
+5. Access Swagger UI  
+Once the application is running, open your browser and visit: http://localhost:8080/swagger-ui/index.html  
+This is where you can view the API documentation and test the endpoints.
 
 ## Testing 
 
@@ -51,7 +58,8 @@ In this project there are two types of tests:
 
 
 ### Unit tests
-From backend folder run tests:
+
+To run unit tests, execute the following command from the backend folder:
 
 ```
 mvn test
@@ -59,7 +67,7 @@ mvn test
 
 ### Integration tests
 
-From backend folder run tests:
+To run integration tests, execute the following command from the backend folder:
 
 ```
 mvn verify -DskipUnitTests=true
@@ -67,7 +75,7 @@ mvn verify -DskipUnitTests=true
 
 ## API Documentation.
 
-The best way to view API documentation is running the poject and accessing it from http://localhost:8080/swagger-ui/index.html .  It has all endpoints with payload and responses description. Also from swagger is a good way to test the endpoints functionality.
+For detailed API documentation, run the project and access Swagger at http://localhost:8080/swagger-ui/index.html. This interactive interface provides endpoint details, including request/response payloads and descriptions.
 
 ### Account Management
 
