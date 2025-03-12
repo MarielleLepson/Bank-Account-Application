@@ -347,7 +347,7 @@ Overall: ~21 hours of work
 5) Define and write tests for edge cases to ensure robust handling of unexpected inputs and scenarios.
 6) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creats some type handling problems.
 7) Save transaction, when currency exchange happens.
-8) Now after looking at it, I would maybe change currency-exchange API endpoints responses, to return something like this. This would give better idea, what was done during currency exchange. 
+8) Now after looking at it, I would also consider changing currency-exchange API endpoints responses, to return something like this. This would give better idea of currency exchange details
 ```
 {
   "fromCurrency": "USD",
