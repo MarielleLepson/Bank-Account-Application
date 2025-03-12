@@ -48,6 +48,19 @@ docker run -p 8080:8080 bank-account-app
 Once the application is running, open your browser and visit: http://localhost:8080/swagger-ui/index.html  
 This is where you can view the API documentation and test the endpoints.
 
+## Solution comments
+
+1) For testing purposes, when the backend starts, it generates 4 random accounts and assigns each 2 balances with random currencies and amounts.  
+2) The current solution supports 5 currencies: EUR, USD, SEK, RUB, and KRW. More can be added to the `Currency` enum class if needed.  
+3) The database stores only account balances that have been created and received deposits. If a balance reaches 0.00, it remains in the database and is not deleted. For example, if a user initially has USD and EUR balances, other currency balances will not exist in the database.  
+4) Users can perform currency exchanges using a fixed rate, which is hardcoded in a map.  
+5) Users can also use real-time currency exchange rates via an external API.  
+6) Flyway was used for database migrations and table creation. I find it best solution when I need to do changes, I can just add another migration file.
+7) I chose Swagger for API documentation because it is the best way to test backend applications. It provides clear documentation, allows easy example setup, and is interactive. However, for long-term use, Postman is also useful for saving API requests and running them quickly.  
+8) For data storage, I decided to keep accounts in one table and store all account balances in a separate table with a foreign key reference. A transactions table was also created to store and track all credit and debit transactions.  
+9) The external API configuration is stored in `application.yml`, making it easy to access and modify. Additional settings like an `enabled` boolean or an API key can also be added there.
+10) To run this project, I decided that a Dockerfile is sufficient because it automates the setup process by downloading all dependencies, configuring the environment, and ensuring that Java is properly installed. Docker provides a consistent runtime environment, making it easy to deploy and run the application on any system without worrying about manual setup or configuration issues. 
+
 ## Testing 
 
 For this project multiple test were written to test functionality and API endpoints. The primary purpose was to test all the main functionalities, but also have a good coverage. 
@@ -311,7 +324,8 @@ Overall: ~21 hours of work
 5) Develop a frontend interface to allow users to interact with the API. I would use Vue or Angular for that. 
 6) Define and write tests for edge cases to ensure robust handling of unexpected inputs and scenarios.
 7) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creats some type handling problems.
-8) Now after looking at it, I would maybe change currency-exchange API endpoints responses, to return something like this. This would give better idea, what was done during currency exchange. 
+8) Save transaction, when currency exchange happens.
+9) Now after looking at it, I would maybe change currency-exchange API endpoints responses, to return something like this. This would give better idea, what was done during currency exchange. 
 ```
 {
   "fromCurrency": "USD",
