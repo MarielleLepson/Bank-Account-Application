@@ -89,7 +89,7 @@ class AccountBalanceControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Deposit successful"));
+                .andExpect(content().string("Deposit/Credit successful"));
     }
 
     @Test
@@ -104,7 +104,7 @@ class AccountBalanceControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(creditJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Deposit successful"));
+                .andExpect(content().string("Deposit/Credit successful"));
 
         DebitBalanceDTO debitDTO = new DebitBalanceDTO();
         debitDTO.setAccountNumber(account.getAccountNumber());
