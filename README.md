@@ -345,7 +345,7 @@ Overall: ~21 hours of work
 3) Expand testing by configuring H2 to store data in files or integrate a database like PostgreSQL.
 4) Develop a frontend interface to allow users to interact with the API. I would use Vue or Angular for that. 
 5) Define and write tests for edge cases to ensure robust handling of unexpected inputs and scenarios.
-6) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creats some type handling problems.
+6) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creates some unnecessary balance data type differences and converting from one type to another.
 7) Save transaction, when currency exchange happens.
 8) Now after looking at it, I would also consider changing currency-exchange API endpoints responses, to return something like this. This would give better idea of currency exchange details
 ```
