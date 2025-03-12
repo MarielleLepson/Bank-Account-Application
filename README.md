@@ -3,7 +3,7 @@
 ## Description
 The application is primarily focused on managing bank accounts. It provides endpoints to view account balances, debit and credit money, and perform currency conversions. For currency conversion, users have two options: one endpoint uses a fixed conversion rate configured in the system, while another endpoint retrieves the latest conversion rates from an external API. The API is built using Java and the Spring Framework (with Spring Boot) and is using h2 embedded database.
 
-> This project is primarily a backend application.
+> This project is a backend application.
 
 
 ## Technologies
