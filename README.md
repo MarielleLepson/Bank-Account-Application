@@ -139,7 +139,7 @@ Response:
 
 - Get All Bank Accounts
   - Method: GET
-  - Path: /api/account
+  - Path: /api/accounts
   - Description: Retrieves a list of all bank accounts.
 
 Response:
@@ -218,7 +218,7 @@ Response:
 
 - Get Account Balance
   - Method: GET
-  - Path: /api/account-balance/{accountNumber}
+  - Path: /api/account-balances/{accountNumber}
   - Description: Retrieves the current balance of the specified bank account.
   - Example Request: (GET /api/account-balance/EE123456789012345678)  
 
