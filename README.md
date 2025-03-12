@@ -59,7 +59,17 @@ This is where you can view the API documentation and test the endpoints.
 7) I chose Swagger for API documentation because it is the best way to test backend applications. It provides clear documentation, allows easy example setup, and is interactive. However, for long-term use, Postman is also useful for saving API requests and running them quickly.  
 8) For data storage, I decided to keep accounts in one table and store all account balances in a separate table with a foreign key reference. A transactions table was also created to store and track all credit and debit transactions.  
 9) The external API configuration is stored in `application.yml`, making it easy to access and modify. Additional settings like an `enabled` boolean or an API key can also be added there.
-10) To run this project, I decided that a Dockerfile is sufficient because it automates the setup process by downloading all dependencies, configuring the environment, and ensuring that Java is properly installed. Docker provides a consistent runtime environment, making it easy to deploy and run the application on any system without worrying about manual setup or configuration issues. 
+10) To run this project, I decided that a Dockerfile is sufficient because it automates the setup process by downloading all dependencies, configuring the environment, and ensuring that Java is properly installed. Docker provides a consistent runtime environment, making it easy to deploy and run the application on any system without worrying about manual setup or configuration issues.
+
+### Recommended Testing Steps
+
+When starting testing, I recommend these steps:
+
+1) **Get All Bank Accounts** – Retrieve the list of existing accounts to see what is available.  
+2) **Check Account Balances** – Copy one of the account numbers and fetch its balances to understand how the system stores them.  
+3) **Create a New Bank Account** – Try creating your own bank account to verify account creation functionality.  
+4) **Test Credit Before Debit** – Deposit money into an account before attempting to withdraw, ensuring the balance is sufficient.  
+5) **Try Currency Exchange** – Perform a currency exchange, selecting an account that has enough balance for the transaction.  
 
 ## Testing 
 
