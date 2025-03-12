@@ -51,7 +51,7 @@ public class AccountControllerTest {
         when(accountService.getAllAccounts()).thenReturn(accounts);
         when(accountService.mapAccountsToDTO(accounts)).thenReturn(accountDTOs);
 
-        mockMvc.perform(get("/api/account"))
+        mockMvc.perform(get("/api/accounts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].accountNumber").value("EE123456789012345678"));

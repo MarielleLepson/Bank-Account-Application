@@ -44,7 +44,7 @@ class AccountControllerIT {
 
     @Test
     void testGetAllAccounts_Empty() throws Exception {
-        mockMvc.perform(get("/api/account"))
+        mockMvc.perform(get("/api/accounts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }

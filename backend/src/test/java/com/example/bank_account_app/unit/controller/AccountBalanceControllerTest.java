@@ -66,7 +66,7 @@ public class AccountBalanceControllerTest {
         try (MockedStatic<AccountUtils> accountUtilsMock = mockStatic(AccountUtils.class)) {
             accountUtilsMock.when(() -> AccountUtils.isValidAccountNumber(invalidAccountNumber)).thenReturn(false);
 
-            mockMvc.perform(get("/api/account-balance/" + invalidAccountNumber))
+            mockMvc.perform(get("/api/account-balances/" + invalidAccountNumber))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().string("Invalid account number"));
         }
@@ -79,7 +79,7 @@ public class AccountBalanceControllerTest {
             accountUtilsMock.when(() -> AccountUtils.isValidAccountNumber(validAccountNumber)).thenReturn(true);
             when(accountService.getAccountByAccountNumber(validAccountNumber)).thenReturn(null);
 
-            mockMvc.perform(get("/api/account-balance/" + validAccountNumber))
+            mockMvc.perform(get("/api/account-balances/" + validAccountNumber))
                     .andExpect(status().isNotFound())
                     .andExpect(content().string("Account not found"));
         }
@@ -104,7 +104,7 @@ public class AccountBalanceControllerTest {
             when(accountBalanceService.getAccountBalances(account)).thenReturn(balances);
             when(accountBalanceService.mapAccountBalancesToDTO(balances, account)).thenReturn(balanceDTO);
 
-            mockMvc.perform(get("/api/account-balance/" + validAccountNumber))
+            mockMvc.perform(get("/api/account-balances/" + validAccountNumber))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.accountNumber").value(validAccountNumber));
         }

@@ -29,7 +29,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/account-balance")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountBalanceController {
     private final AccountBalanceService accountBalanceService;
@@ -49,7 +49,7 @@ public class AccountBalanceController {
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid account number",
                     content = @Content())
     })
-    @GetMapping("/{accountNumber}")
+    @GetMapping("/account-balances/{accountNumber}")
     public ResponseEntity<?> getAccountBalance(@Parameter(description = "Bank account number", example = "EE123456789012345678")
                                                @PathVariable String accountNumber) {
         // Validate account number
@@ -85,7 +85,7 @@ public class AccountBalanceController {
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid CreditBalanceDTO payload",
                     content = @Content())
     })
-    @PostMapping("/credit")
+    @PostMapping("/account-balance/credit")
     public ResponseEntity<?> depositMoney(
             @Valid @RequestBody CreditBalanceDTO creditBalanceDTO,
             Errors errors) {
@@ -137,7 +137,7 @@ public class AccountBalanceController {
             @ApiResponse(responseCode = "422", description = "Unprocessable entity - Insufficient balance",
                     content = @Content())
     })
-    @PostMapping("/debit")
+    @PostMapping("/account-balance/debit")
     public ResponseEntity<?> debitMoney(
             @Valid @RequestBody DebitBalanceDTO debitBalanceDTO,
             Errors errors) {

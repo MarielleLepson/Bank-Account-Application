@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
@@ -36,7 +36,7 @@ public class AccountController {
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class))))
     })
-    @GetMapping
+    @GetMapping("/accounts")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         log.info("Fetching all bank accounts...");
         // Fetch all accounts
@@ -59,7 +59,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid account number",
                     content = @Content())
     })
-    @GetMapping("/{accountNumber}")
+    @GetMapping("/account/{accountNumber}")
     public ResponseEntity<?> getAccountByNumber(
             @Parameter(description = "Bank account number", example = "EE123456789012345678")
             @PathVariable String accountNumber) {
@@ -96,7 +96,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid account holder name",
                     content = @Content())
     })
-    @PostMapping("/create")
+    @PostMapping("/account/create")
     public ResponseEntity<?> createAccount(@RequestBody CreateAccountDTO createAccountDTO) {
         log.info("Creating a new bank account...");
 

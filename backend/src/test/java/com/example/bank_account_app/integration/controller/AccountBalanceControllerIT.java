@@ -57,7 +57,7 @@ class AccountBalanceControllerIT {
 
     @Test
     void testGetAccountBalance_InvalidAccountNumber() throws Exception {
-        mockMvc.perform(get("/api/account-balance/invalid"))
+        mockMvc.perform(get("/api/account-balances/invalid"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Invalid account number"));
     }
@@ -65,14 +65,14 @@ class AccountBalanceControllerIT {
     @Test
     void testGetAccountBalance_AccountNotFound() throws Exception {
         String nonExisting = "EE000000000000000000";
-        mockMvc.perform(get("/api/account-balance/" + nonExisting))
+        mockMvc.perform(get("/api/account-balances/" + nonExisting))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Account not found"));
     }
 
     @Test
     void testGetAccountBalance_Success() throws Exception {
-        mockMvc.perform(get("/api/account-balance/" + account.getAccountNumber()))
+        mockMvc.perform(get("/api/account-balances/" + account.getAccountNumber()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()));
     }
