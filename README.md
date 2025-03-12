@@ -48,6 +48,19 @@ docker run -p 8080:8080 bank-account-app
 Once the application is running, open your browser and visit: http://localhost:8080/swagger-ui/index.html  
 This is where you can view the API documentation and test the endpoints.
 
+
+### Development
+
+For development purposes you can run:
+```
+cd /path/to/your/project
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+
+Then you can also login and view h2 database from: http://localhost:8080/h2-console/ and APi documentation: http://localhost:8080/swagger-ui/index.html 
+
 ## Solution comments
 
 1) For testing purposes, when the backend starts, it generates 4 random accounts and assigns each 2 balances with random currencies and amounts.  
@@ -329,13 +342,12 @@ Overall: ~21 hours of work
 ## What else would I have done in this project?
 1) Add more data validation logic throughout the application and throw clear exceptions when necessary.
 2) Add more logging to capture critical events and error conditions for easier debugging and monitoring.
-3) Test with h2 storing to files or add postgreSQL
-4) Expand testing by configuring H2 to store data in files or integrate a database like PostgreSQL.
-5) Develop a frontend interface to allow users to interact with the API. I would use Vue or Angular for that. 
-6) Define and write tests for edge cases to ensure robust handling of unexpected inputs and scenarios.
-7) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creats some type handling problems.
-8) Save transaction, when currency exchange happens.
-9) Now after looking at it, I would maybe change currency-exchange API endpoints responses, to return something like this. This would give better idea, what was done during currency exchange. 
+3) Expand testing by configuring H2 to store data in files or integrate a database like PostgreSQL.
+4) Develop a frontend interface to allow users to interact with the API. I would use Vue or Angular for that. 
+5) Define and write tests for edge cases to ensure robust handling of unexpected inputs and scenarios.
+6) In some places double is used instead of Big Decimal. I would remove double type for balance, since it creats some type handling problems.
+7) Save transaction, when currency exchange happens.
+8) Now after looking at it, I would maybe change currency-exchange API endpoints responses, to return something like this. This would give better idea, what was done during currency exchange. 
 ```
 {
   "fromCurrency": "USD",
